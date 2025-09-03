@@ -11,7 +11,9 @@ pipeline {
     stages {
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Nikhil235417/3-tier.git'
+                git branch: 'main',
+                    url: 'https://github.com/Nikhil235417/3tier.git',
+                    credentialsId: 'git-creds'
             }
         }
 
