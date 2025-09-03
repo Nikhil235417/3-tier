@@ -26,12 +26,14 @@ pipeline {
         }
 
         stage('Push Docker Images') {
-            steps {
-                sh "echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin"
-                sh 'docker push 86312/frontend'
-                sh 'docker push 86312/backend'
-                sh 'docker push 86312/database'
-            }
+             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push $DOCKER_USER/frontend
+                        docker push $DOCKER_USER/backend
+                        docker push $DOCKER_USER/database
+                    '''
+                }
         }
 
         stage('Deploy to EKS') {
