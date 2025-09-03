@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_USER = 'your-dockerhub-username'
+        DOCKERHUB_PASS = credentials('dockerhub-creds')  // add in Jenkins
+    }
+
+    stages {
+        stage('Clone Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/<your-username>/3tier-app.git'
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker build -t $DOCKERHUB_USER/frontend ./frontend'
+                sh 'docker build -t $DOCKERHUB_USER/backend ./backend'
+                sh 'docker build -t $DOCKERHUB_USER/database ./database'
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                sh "echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin"
+                sh 'docker push $DOCKERHUB_USER/frontend'
+                sh 'docker push $DOCKERHUB_USER/backend'
+                sh 'docker push $DOCKERHUB_USER/database'
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+}
