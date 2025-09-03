@@ -19,18 +19,18 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker build -t $DOCKERHUB_USER/frontend ./frontend'
-                sh 'docker build -t $DOCKERHUB_USER/backend ./backend'
-                sh 'docker build -t $DOCKERHUB_USER/database ./database'
+                sh 'docker build -t 86312/frontend ./frontend'
+                sh 'docker build -t 86312/backend ./backend'
+                sh 'docker build -t 86312/database ./database'
             }
         }
 
         stage('Push Docker Images') {
             steps {
                 sh "echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin"
-                sh 'docker push $DOCKERHUB_USER/frontend'
-                sh 'docker push $DOCKERHUB_USER/backend'
-                sh 'docker push $DOCKERHUB_USER/database'
+                sh 'docker push 86312/frontend'
+                sh 'docker push 86312/backend'
+                sh 'docker push 86312/database'
             }
         }
 
