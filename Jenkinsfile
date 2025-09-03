@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = 'your-dockerhub-username'
+        DOCKERHUB_USER = '86312'
         DOCKERHUB_PASS = credentials('dockerhub-creds')  // Jenkins credential ID
         AWS_REGION = 'your-aws-region'
         EKS_CLUSTER = 'three-tier-cluster'
@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/3tier-app.git'
+                git branch: 'main', url: 'https://github.com/Nikhil235417/3-tier.git'
             }
         }
 
